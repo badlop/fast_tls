@@ -1376,7 +1376,7 @@ static ERL_NIF_TERM set_fips_mode_nif(ErlNifEnv *env, int argc,
   if (!enif_get_int(env, argv[0], &enable))
     return enif_make_badarg(env);
 
-#if OPENSSL_VERSION_NUMBER < 0x30000000L
+#if OPENSSL_VERSION_NUMBER < 0x30000000L && !defined LIBRESSL_VERSION_NUMBER
   int fips_mode = FIPS_mode();
 
   if ((fips_mode == 0 && enable != 0) ||
@@ -1395,7 +1395,7 @@ static ERL_NIF_TERM set_fips_mode_nif(ErlNifEnv *env, int argc,
 static ERL_NIF_TERM get_fips_mode_nif(ErlNifEnv *env, int argc,
                                       const ERL_NIF_TERM argv[]) {
 
-#if OPENSSL_VERSION_NUMBER < 0x30000000L
+#if OPENSSL_VERSION_NUMBER < 0x30000000L && !defined LIBRESSL_VERSION_NUMBER
   const char *ret = FIPS_mode() ? "true" : "false";
 #else
 #warning OpenSSL 3 FIPS support not implemented
