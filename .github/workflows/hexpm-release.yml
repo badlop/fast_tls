@@ -1,9 +1,6 @@
 name: Hex
 
-on:
-  push:
-    tags:
-      - '*'
+on: [push]
 
 jobs:
   release:
@@ -37,7 +34,5 @@ jobs:
           mv doc/index.html doc/edoc.html
           mv README.html doc/index.html
 
-      - name: Publish to hex.pm
-        run: DEBUG=1 rebar3 hex publish --repo hexpm --yes
-        env:
-          HEX_API_KEY: ${{ secrets.HEX_API_KEY }}
+      - run: |
+          cat doc/index.html
