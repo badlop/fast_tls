@@ -25,7 +25,7 @@ jobs:
     - run: rebar3 dialyzer
     - run: rebar3 eunit -v
 
-  cover-ubuntu-20:
+  cover1:
     name: Cover-ubuntu20
     needs: [tests]
     runs-on: ubuntu-20.04
@@ -35,7 +35,7 @@ jobs:
     - run: rebar3 compile
     - run: rebar3 eunit -v
 
-  cover-ubuntu-22:
+  cover2:
     name: Cover-ubuntu22
     needs: [tests]
     runs-on: ubuntu-22.04
@@ -45,7 +45,19 @@ jobs:
     - run: rebar3 compile
     - run: rebar3 eunit -v
 
-  cover-ubuntu-latest:
+  cover2b:
+    name: Cover-ubuntu22-erlang26
+    needs: [tests]
+    runs-on: ubuntu-22.04
+    container:
+      image: erlang:26
+    steps:
+    - uses: actions/checkout@v4
+    - run: ./configure --enable-gcov
+    - run: rebar3 compile
+    - run: rebar3 eunit -v
+
+  cover3:
     name: Cover-ubuntulatest
     needs: [tests]
     runs-on: ubuntu-latest
@@ -55,8 +67,8 @@ jobs:
     - run: rebar3 compile
     - run: rebar3 eunit -v
 
-  cover-ubuntulatest-erlanglatest:
-    name: Cover
+  cover4:
+    name: Cover-ubuntulatest-erlanglatest
     needs: [tests]
     runs-on: ubuntu-latest
     container:
@@ -67,8 +79,8 @@ jobs:
     - run: rebar3 compile
     - run: rebar3 eunit -v
 
-  cover-ubuntulatest-erlang:
-    name: Cover
+  cover5:
+    name: Cover-ubuntulatest-erlang
     needs: [tests]
     runs-on: ubuntu-latest
     container:
