@@ -25,7 +25,7 @@ jobs:
     - run: rebar3 dialyzer
     - run: rebar3 eunit -v
 
-  cover:
+  cover-ubuntu-20:
     name: Cover
     needs: [tests]
     runs-on: ubuntu-20.04
@@ -34,17 +34,35 @@ jobs:
     - run: ./configure --enable-gcov
     - run: rebar3 compile
     - run: rebar3 eunit -v
+
+  cover-ubuntu-22:
+    name: Cover
+    needs: [tests]
+    runs-on: ubuntu-22.04
+    steps:
+    - uses: actions/checkout@v4
+    - run: ./configure --enable-gcov
+    - run: rebar3 compile
     - run: rebar3 eunit -v
-    - run: pip install --user cpp-coveralls
-    - run: cpp-coveralls -b `pwd` --verbose --gcov-options '\-lp' --dump c.json
-    - name: Send to Coveralls
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        ADDJSONFILE=c.json COVERALLS=true rebar3 as test coveralls send
-        curl -v -k https://coveralls.io/webhook \
-             --header "Content-Type: application/json" \
-             --data '{"repo_name":"$GITHUB_REPOSITORY",
-                      "repo_token":"$GITHUB_TOKEN",
-                      "payload":{"build_num":$GITHUB_RUN_ID,
-                                 "status":"done"}}'
+
+  cover-ubuntu-latest:
+    name: Cover
+    needs: [tests]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - run: ./configure --enable-gcov
+    - run: rebar3 compile
+    - run: rebar3 eunit -v
+
+  cover-ubuntu-latest-erlang:
+    name: Cover
+    needs: [tests]
+    runs-on: ubuntu-latest
+    container:
+      image: erlang:latest
+    steps:
+    - uses: actions/checkout@v4
+    - run: ./configure --enable-gcov
+    - run: rebar3 compile
+    - run: rebar3 eunit -v
